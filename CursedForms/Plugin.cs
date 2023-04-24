@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using CursedForms;
 using System;
 using UnityEngine;
@@ -57,6 +57,8 @@ namespace CursedForms
             RightPlatform = Instantiate(BasePlatform);
             LeftPlatform = Instantiate(BasePlatform);
 
+            GameObject.Destroy(BasePlatform);
+
             HarmonyPatches.ApplyHarmonyPatches();
         }
 
@@ -85,7 +87,7 @@ namespace CursedForms
             rightHandPos = GameObject.Find("Global/Local VRRig/Local Gorilla Player/rig/body/shoulder.R/upper_arm.R/forearm.R/hand.R");
             leftHandPos = GameObject.Find("Global/Local VRRig/Local Gorilla Player/rig/body/shoulder.L/upper_arm.L/forearm.L/hand.L");
 
-            
+            GameObject.Destroy(BasePlatform);
         }
 
         void Update()
@@ -134,7 +136,17 @@ namespace CursedForms
         {
             /* Activate your mod here */
             /* This code will run regardless of if the mod is enabled*/
-
+            GameObject BasePlatform = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            BasePlatform.transform.localScale = new Vector3(0.3f, 0.1f, 0.3f);
+            if (RightPlatform == null)
+            {
+                RightPlatform = Instantiate(BasePlatform);
+            }
+            if (LeftPlatform == null)
+            {
+                LeftPlatform = Instantiate(BasePlatform);
+            }
+            GameObject.Destroy(BasePlatform);
             inRoom = true;
         }
 
@@ -145,6 +157,14 @@ namespace CursedForms
             /* Deactivate your mod here */
             /* This code will run regardless of if the mod is enabled*/
 
+            if (RightPlatform != null)
+            {
+                GameObject.Destroy(RightPlatform);
+            }
+            if (LeftPlatform != null)
+            {
+                GameObject.Destroy(LeftPlatform);
+            }
             inRoom = false;
         }
     }
