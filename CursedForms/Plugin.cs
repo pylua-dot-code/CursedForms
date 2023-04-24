@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.XR;
 using Utilla;
+using System.ComponentModel;
 
 namespace CursedForms
 {
@@ -13,6 +14,7 @@ namespace CursedForms
 
     /* This attribute tells Utilla to look for [ModdedGameJoin] and [ModdedGameLeave] */
     [ModdedGamemode]
+    [Description("HauntedModMenu")]
     [BepInDependency("org.legoandmars.gorillatag.utilla", "1.5.0")]
     [BepInPlugin(PluginInfo.GUID, PluginInfo.Name, PluginInfo.Version)]
     public class Plugin : BaseUnityPlugin
@@ -108,7 +110,7 @@ namespace CursedForms
                         RightPlatform.transform.SetParent(rightHandPos.transform);
                         RightPlatform.transform.localPosition = new Vector3(0.1f, 0, 0);
                     }
-                    else if (RightGrip && RightTrigger)
+                    else if (RightGrip || RightTrigger)
                     {
                         RightPlatform.transform.localRotation = resetRotation;
                         RightPlatform.transform.SetParent(null);
@@ -120,7 +122,7 @@ namespace CursedForms
                         LeftPlatform.transform.SetParent(leftHandPos.transform);
                         LeftPlatform.transform.localPosition = new Vector3(-0.1f, 0, 0);
                     }
-                    else if (LeftGrip && LeftTrigger)
+                    else if (LeftGrip || LeftTrigger)
                     {
                         LeftPlatform.transform.localRotation = resetRotation;
                         LeftPlatform.transform.SetParent(null);
