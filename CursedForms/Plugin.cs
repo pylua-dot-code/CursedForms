@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.XR;
 using Utilla;
 using System.ComponentModel;
+//Nothing to fix here
 
 namespace CursedForms
 {
@@ -14,9 +15,9 @@ namespace CursedForms
 
     /* This attribute tells Utilla to look for [ModdedGameJoin] and [ModdedGameLeave] */
     [ModdedGamemode]
-    [Description("HauntedModMenu")]
-    [BepInDependency("org.legoandmars.gorillatag.utilla", "1.5.0")]
+    [BepInDependency("org.legoandmars.gorillatag.utilla", "1.6.10")]
     [BepInPlugin(PluginInfo.GUID, PluginInfo.Name, PluginInfo.Version)]
+    //fixed utilia version
     public class Plugin : BaseUnityPlugin
     {
         bool inRoom;
@@ -34,9 +35,6 @@ namespace CursedForms
 
         GameObject rightHandPos;
         GameObject leftHandPos;
-
-        InputDevice rightcontroller = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
-        InputDevice leftcontroller = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
 
         Quaternion resetRotation = new Quaternion(0, 0, 0, 0);
 
@@ -86,24 +84,23 @@ namespace CursedForms
             RightPlatform = Instantiate(BasePlatform);
             LeftPlatform = Instantiate(BasePlatform);
 
-            rightHandPos = GameObject.Find("Global/Local VRRig/Local Gorilla Player/rig/body/shoulder.R/upper_arm.R/forearm.R/hand.R");
-            leftHandPos = GameObject.Find("Global/Local VRRig/Local Gorilla Player/rig/body/shoulder.L/upper_arm.L/forearm.L/hand.L");
+            rightHandPos = GorillaTagger.Instance.rightHandTransform.transform.localPosition;
+            leftHandPos = GorillaTagger.Instance.leftHandTransform.transform.localPosition;
 
             GameObject.Destroy(BasePlatform);
         }
 
-        void Update()
+        void Update(ControllerInputPoller controlinputpoll)
         {
             /* Code here runs every frame when the mod is enabled */
             if (inRoom)
             {
                 if (RightPlatform != null && LeftPlatform != null)
                 {
-                    rightcontroller.TryGetFeatureValue(CommonUsages.gripButton, out RightGrip);
-                    rightcontroller.TryGetFeatureValue(CommonUsages.triggerButton, out RightTrigger);
-
-                    leftcontroller.TryGetFeatureValue(CommonUsages.gripButton, out LeftGrip);
-                    leftcontroller.TryGetFeatureValue(CommonUsages.triggerButton, out LeftTrigger);
+                    RightGrip = controlinputpoll.rightGrab;
+                    LeftGrip = controlinputpoll.leftGrab;
+                    RightTrigger = controlinputpoll.rightControllerIndexFloat;
+                    LeftTrigger = controlinputpoll.leftControllerIndexFloat;
 
                     if (!RightGrip && !RightTrigger)
                     {
